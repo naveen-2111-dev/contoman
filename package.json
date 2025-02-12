@@ -1,0 +1,54 @@
+{
+  "name": "contoman",
+  "version": "1.0.0",
+  "description": "A Node.js package using Bun and Ethers.js",
+  "module": "index.ts",
+  "main": "index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    "import": "./dist/index.js",
+    "require": "./dist/index.cjs"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "bun run build",
+    "prepublishOnly": "bun run build",
+    "dev":"node ./index.ts",
+    "test": "bun test",
+    "lint": "bun run lint"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/fs-extra": "^11.0.4",
+    "typescript": "^5.0.0"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "chalk": "^5.4.1",
+    "commander": "^13.1.0",
+    "ethers": "^6.13.5",
+    "fs-extra": "^11.3.0",
+    "inquirer": "^12.4.1"
+  },
+  "engines": {
+    "node": ">=18",
+    "bun": ">=1.0.0"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/contoman.git"
+  },
+  "author": "Your Name <your.email@example.com>",
+  "keywords": [
+    "bun",
+    "ethers",
+    "typescript",
+    "blockchain",
+    "node-package"
+  ]
+}

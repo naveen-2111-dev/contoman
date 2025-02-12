@@ -1,0 +1,49 @@
+# Node/Bun dependencies
+node_modules/
+bun.lockb
+.pnp/
+.pnp.js
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+bun-debug.log*
+
+# Directory for test coverage
+coverage/
+
+# Compiled output
+dist/
+build/
+
+# TypeScript
+*.tsbuildinfo
+
+# IDE/editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Ignore contract artifacts
+contracts/artifacts/
+contracts/cache/
+
+# Ignore generated test files
+test/output/
+test/temp/
+
+# Ignore package manager lock files (if using multiple)
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
