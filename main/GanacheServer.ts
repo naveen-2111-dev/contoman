@@ -53,6 +53,6 @@ export default async function GanacheServer() {
 
     await fetchBalances();
 
-    setInterval(fetchBalances, 5000);
+    setInterval(fetchBalances, 10000);
   });
 }
