@@ -12,6 +12,7 @@
   },
   "devDependencies": {
     "@types/bun": "latest",
+    "@types/figlet": "^1.7.0",
     "@types/fs-extra": "^11.0.4",
     "typescript": "^5.0.0"
   },
@@ -26,6 +27,7 @@
     "fs-extra": "^11.3.0",
     "ganache": "^7.9.2",
     "inquirer": "^12.4.1",
+    "ora": "^8.2.0",
     "solc": "^0.8.28"
   },
   "engines": {
