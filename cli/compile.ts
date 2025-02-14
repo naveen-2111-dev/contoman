@@ -1,10 +1,10 @@
 import { Command } from "commander";
-import chalk from "chalk";
+import { CompileContracts } from "../main/Compile";
 
-const CompileSolc = new Command("Compile")
-  .description("Prints a hello message")
+const CompileSolc = new Command("compile")
+  .description("compiles code with the given project name")
   .action(() => {
-    console.log(chalk.green("👋 Hello from another command!"));
+    CompileContracts();
   });
 
 export default CompileSolc;

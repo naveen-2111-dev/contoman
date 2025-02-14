@@ -1,4 +1,4 @@
 {
     "RPC": "local",
-    "walletAddress": "privatekey"
+    "PRIVATE_KEY": "privatekey"
 }

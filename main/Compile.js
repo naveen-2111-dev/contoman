@@ -2,8 +2,8 @@ import solc from "solc";
 import fs from "fs-extra";
 import path from "path";
 
-export async function CompileContracts(projectname) {
-  const projectpath = path.join(process.cwd(), projectname);
+export async function CompileContracts() {
+  const projectpath = process.cwd();
   const contractpath = path.join(projectpath, "contracts");
   const buildPath = path.join(projectpath, "build");
 
@@ -80,4 +80,3 @@ export async function CompileContracts(projectname) {
     }
   });
 }
-
