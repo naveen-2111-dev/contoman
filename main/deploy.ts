@@ -33,6 +33,17 @@ export default async function Deploy() {
     const Config = JSON.parse(filedet);
 
     const { RPC, PRIVATE_KEY } = Config;
+
+    if (!RPC || RPC === "local") {
+      console.error(chalk.red("RPC is missing in deploy.config.json!"));
+      process.exit(1);
+    }
+
+    if (!PRIVATE_KEY || PRIVATE_KEY === "privatekey") {
+      console.error(chalk.red("PRIVATE_KEY is missing in deploy.config.json!"));
+      process.exit(1);
+    }
+
     const Provider = new ethers.JsonRpcProvider(RPC);
     const signer = new ethers.Wallet(PRIVATE_KEY, Provider);
 
@@ -41,6 +52,15 @@ export default async function Deploy() {
       spinner: "dots",
     }).start();
 
+    if (!fs.existsSync(buildPath) || fs.readdirSync(buildPath).length === 0) {
+      try {
+        await CompileContracts();
+      } catch (error) {
+        console.error(chalk.red("Contract compilation failed."), error);
+        process.exit(1);
+      }
+    }
+
     const ABIfile = fs
       .readdirSync(buildPath)
       .filter((item) => item.endsWith(".json"));
@@ -48,24 +68,11 @@ export default async function Deploy() {
       .readdirSync(buildPath)
       .filter((item) => item.endsWith(".txt"));
 
-    if (!ABIfile || !BYTEfile) {
-      try {
-        await CompileContracts();
-        spinner.succeed("Contract compiled successfully.");
-      } catch (error) {
-        spinner.fail("Contract compilation failed.");
-        return;
-      }
-    }
-
-    if (ABIfile.length === 0) {
-      spinner.fail("No ABI JSON file found in build directory.");
-      return;
-    }
-
-    if (BYTEfile.length === 0) {
-      spinner.fail("No Bytecode file found in build directory.");
-      return;
+    if (ABIfile.length === 0 || BYTEfile.length === 0) {
+      console.error(
+        chalk.red("No ABI or Bytecode files found in build directory.")
+      );
+      process.exit(1);
     }
 
     const abiPath = path.join(buildPath, ABIfile[0]);

@@ -46,7 +46,7 @@ export default async function GanacheServer() {
 
       console.log(
         chalk.green.bold(
-          "\n🔥 The contracts deployed to Ganache are available locally alone 🔥"
+          "🚀 Ganache is running locally at: http://127.0.0.1:8545"
         )
       );
     };
