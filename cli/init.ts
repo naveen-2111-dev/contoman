@@ -36,9 +36,9 @@ const Init = new Command("init")
       );
       fs.writeFileSync(contractFilePath, contractTemplate);
 
-      const testFilePath = path.join(testPath, "test.txt");
+      const testFilePath = path.join(testPath, "test.conto");
       const testTemplate = fs.readFileSync(
-        path.join(boilerplatePath, "test.txt"),
+        path.join(boilerplatePath, "test.conto"),
         "utf8"
       );
       fs.writeFileSync(testFilePath, testTemplate);
