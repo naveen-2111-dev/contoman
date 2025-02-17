@@ -96,5 +96,4 @@ export async function CompileContracts() {
     }
   });
   spinner.stop();
-  process.exit(0);
 }

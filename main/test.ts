@@ -1,8 +1,6 @@
 import chalk from "chalk";
-import { ethers } from "ethers";
 import * as fs from "fs-extra";
 import path from "path";
-import ora from "ora";
 
 export async function Test() {
   const currentDir = process.cwd();
@@ -10,7 +8,7 @@ export async function Test() {
 
   const TestFiles = fs
     .readdirSync(TestDir)
-    .filter((item) => item.endsWith(".txt"));
+    .filter((item) => item.endsWith(".conto"));
 
   if (TestFiles.length === 0) {
     console.error(chalk.red("test dir does not have any files inside to it"));
@@ -34,4 +32,7 @@ export async function Test() {
   }
 
   console.log(sections.function, sections.params);
+
+  //function testing
+  
 }

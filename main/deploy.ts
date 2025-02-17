@@ -95,6 +95,7 @@ export default async function Deploy() {
     const tx = contract.deploymentTransaction();
 
     spinner.succeed(`Contract deployed at: ${contract.target}`);
+    console.log("");
     spinner.stopAndPersist({
       text: `Transaction hash: ${tx?.hash}`,
     });
