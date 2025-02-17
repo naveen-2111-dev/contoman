@@ -34,5 +34,10 @@ export async function Test() {
   console.log(sections.function, sections.params);
 
   //function testing
-  
+  const projectPath = process.cwd();
+  const buildpath = path.join(projectPath, "build");
+  const abi = fs
+    .readdirSync(buildpath)
+    .filter((item) => item.endsWith(".json"));
+  console.log(abi);
 }

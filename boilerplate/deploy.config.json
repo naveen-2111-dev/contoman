@@ -1,4 +1,5 @@
 {
     "RPC": "local",
-    "PRIVATE_KEY": "privatekey"
+    "PRIVATE_KEY": "privatekey",
+    "ContractFileName": "Contract"
 }
