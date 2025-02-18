@@ -37,11 +37,17 @@ const Init = new Command("init")
       fs.writeFileSync(contractFilePath, contractTemplate);
 
       const testFilePath = path.join(testPath, "test.conto");
+      const TestConfig = path.join(testPath, "test.config");
       const testTemplate = fs.readFileSync(
         path.join(boilerplatePath, "test.conto"),
         "utf8"
       );
+      const TestConfigPath = fs.readFileSync(
+        path.join(boilerplatePath, "test.config"),
+        "utf8"
+      );
       fs.writeFileSync(testFilePath, testTemplate);
+      fs.writeFileSync(TestConfig, TestConfigPath);
 
       const packageJson = {
         name: projectName,
@@ -70,7 +76,7 @@ const Init = new Command("init")
       fs.writeFileSync(path.join(projectPath, ".gitignore"), gitignoreContent);
 
       console.log(
-        chalk.green(`✅ Project '${projectName}' initialized successfully!`)
+        chalk.green(`Project '${projectName}' initialized successfully!`)
       );
       console.log(chalk.blue(`Run: cd ${projectName} && bun install`));
     } catch (error) {
