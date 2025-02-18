@@ -26,13 +26,17 @@ export default async function Deploy() {
   const projectdir = process.cwd();
   const configPath = path.join(projectdir, "deploy.config.json");
   const buildPath = path.join(projectdir, "build");
-  const address = path.join(buildPath, "deployment");
+
+  const spinner = ora({
+    text: chalk.yellow("🚀 Preparing contract deployment..."),
+    spinner: "dots",
+  }).start();
 
   try {
     const filedet = fs.readFileSync(configPath, "utf-8");
     const Config = JSON.parse(filedet);
 
-    const { RPC, PRIVATE_KEY } = Config;
+    const { RPC, PRIVATE_KEY, CONTRACT_FILE } = Config;
 
     if (!RPC || RPC === "local") {
       console.error(chalk.red("RPC is missing in deploy.config.json!"));
@@ -47,11 +51,6 @@ export default async function Deploy() {
     const Provider = new ethers.JsonRpcProvider(RPC);
     const signer = new ethers.Wallet(PRIVATE_KEY, Provider);
 
-    const spinner = ora({
-      text: chalk.yellow("🚀 Preparing contract deployment..."),
-      spinner: "dots",
-    }).start();
-
     if (!fs.existsSync(buildPath) || fs.readdirSync(buildPath).length === 0) {
       try {
         await CompileContracts();
@@ -61,11 +60,13 @@ export default async function Deploy() {
       }
     }
 
+    const ContractPath = path.join(buildPath, CONTRACT_FILE);
+
     const ABIfile = fs
-      .readdirSync(buildPath)
+      .readdirSync(ContractPath)
       .filter((item) => item.endsWith(".json"));
     const BYTEfile = fs
-      .readdirSync(buildPath)
+      .readdirSync(ContractPath)
       .filter((item) => item.endsWith(".txt"));
 
     if (ABIfile.length === 0 || BYTEfile.length === 0) {
@@ -75,8 +76,8 @@ export default async function Deploy() {
       process.exit(1);
     }
 
-    const abiPath = path.join(buildPath, ABIfile[0]);
-    const bytepath = path.join(buildPath, BYTEfile[0]);
+    const abiPath = path.join(ContractPath, ABIfile[0]);
+    const bytepath = path.join(ContractPath, BYTEfile[0]);
     const abiContent = fs.readFileSync(abiPath, "utf-8");
     const byteContent = fs.readFileSync(bytepath, "utf-8");
     const abiJson = JSON.parse(abiContent);
@@ -121,6 +122,8 @@ export default async function Deploy() {
       chainInfo: await Provider.getNetwork(),
     };
 
+    const address = path.join(ContractPath, "deployment");
+
     fs.ensureDirSync(address);
     const deploymentFilePath = path.join(address, "contract.json");
     fs.writeFileSync(
@@ -132,4 +135,5 @@ export default async function Deploy() {
   } catch (error) {
     console.error("Error during deployment:", error);
   }
+  spinner.stop();
 }

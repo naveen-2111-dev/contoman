@@ -5,22 +5,22 @@ import ora from "ora";
 import chalk from "chalk";
 
 export async function CompileContracts() {
-  const projectpath = process.cwd();
-  const contractpath = path.join(projectpath, "contracts");
-  const buildPath = path.join(projectpath, "build");
+  const projectPath = process.cwd();
+  const contractPath = path.join(projectPath, "contracts");
+  const buildPath = path.join(projectPath, "build");
 
   const spinner = ora({
     spinner: "dots",
     text: "Compiling contracts...",
   }).start();
 
-  if (!fs.existsSync(contractpath)) {
+  if (!fs.existsSync(contractPath)) {
     spinner.fail("Contracts folder not found!");
     return;
   }
 
   const contractFiles = fs
-    .readdirSync(contractpath)
+    .readdirSync(contractPath)
     .filter((file) => file.endsWith(".sol"));
 
   if (contractFiles.length === 0) {
@@ -30,70 +30,68 @@ export async function CompileContracts() {
 
   fs.ensureDirSync(buildPath);
 
+  const sources = {};
   contractFiles.forEach((file) => {
-    try {
-      const contractFilePath = path.join(contractpath, file);
-      const contractSource = fs.readFileSync(contractFilePath, "utf8");
-
-      const input = {
-        language: "Solidity",
-        sources: {
-          [file]: {
-            content: contractSource,
-          },
-        },
-        settings: {
-          outputSelection: {
-            "*": {
-              "*": ["abi", "evm.bytecode.object"],
-            },
-          },
-        },
-      };
-
-      const compiled = JSON.parse(solc.compile(JSON.stringify(input)));
-
-      if (compiled.errors) {
-        compiled.errors.forEach((error) => {
-          console.error(
-            chalk.red(`Error in ${file}: ${error.formattedMessage}`)
-          );
-        });
-        spinner.fail(`Compilation failed for ${file}`);
-        return;
-      }
-
-      if (!compiled.contracts || !compiled.contracts[file]) {
-        spinner.fail(
-          `Compilation failed for ${file}: No contract output found`
-        );
-        return;
-      }
-
-      for (const contractKey in compiled.contracts[file]) {
-        const contractData = compiled.contracts[file][contractKey];
-
-        const abi = contractData.abi;
-        const bytecode = contractData.evm.bytecode.object;
-
-        fs.writeFileSync(
-          path.join(buildPath, `${contractKey}.abi.json`),
-          JSON.stringify(abi, null, 2)
-        );
-        fs.writeFileSync(
-          path.join(buildPath, `${contractKey}.bytecode.txt`),
-          bytecode
-        );
-
-        spinner.succeed(
-          chalk.green(`Compilation successful for ${contractKey}`)
-        );
-      }
-    } catch (error) {
-      spinner.fail(
-        `Unexpected error during compilation of ${file}: ${error.message}`
-      );
-    }
+    const contractFilePath = path.join(contractPath, file);
+    const contractSource = fs.readFileSync(contractFilePath, "utf8");
+    sources[file] = { content: contractSource };
   });
+
+  const input = {
+    language: "Solidity",
+    sources,
+    settings: {
+      outputSelection: {
+        "*": {
+          "*": ["abi", "evm.bytecode.object"],
+        },
+      },
+    },
+  };
+
+  let compiled;
+  try {
+    compiled = JSON.parse(solc.compile(JSON.stringify(input)));
+  } catch (error) {
+    spinner.fail(`Solidity compilation error: ${error.message}`);
+    return;
+  }
+
+  if (compiled.errors) {
+    compiled.errors.forEach((error) => {
+      console.error(chalk.red(`Error: ${error.formattedMessage}`));
+    });
+    spinner.fail("Compilation failed due to errors.");
+    return;
+  }
+
+  if (!compiled.contracts) {
+    spinner.fail("Compilation failed: No contract output found.");
+    return;
+  }
+
+  for (const file in compiled.contracts) {
+    for (const contractKey in compiled.contracts[file]) {
+      const contractData = compiled.contracts[file][contractKey];
+
+      const contractBuildPath = path.join(buildPath, contractKey);
+      fs.ensureDirSync(contractBuildPath);
+
+      const abi = contractData.abi;
+      const bytecode = contractData.evm.bytecode.object;
+
+      fs.writeFileSync(
+        path.join(contractBuildPath, `${contractKey}.abi.json`),
+        JSON.stringify(abi, null, 2)
+      );
+      fs.writeFileSync(
+        path.join(contractBuildPath, `${contractKey}.bytecode.txt`),
+        bytecode
+      );
+
+      spinner.succeed(chalk.green(`Compilation successful for ${contractKey}`));
+    }
+  }
+
   spinner.stop();
 }
