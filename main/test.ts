@@ -24,16 +24,19 @@ export async function Test() {
 
   if (matches) {
     matches.forEach((match) => {
-      const [, key, value] = match.match(/#(\w+)\s*\n([\s\S]*)/) || [];
-      if (key && value) {
-        sections[key] = value.trim();
+      const matchResult = match.match(/#(\w+)\s*\n([\s\S]*)/);
+      if (matchResult) {
+        const key = matchResult[1].trim();
+        const value = matchResult[2].trim();
+        sections[key] = value;
       }
     });
   }
 
-  console.log(sections.function, sections.params);
+  console.log("Function:", sections.function);
+  console.log("Params:", sections.params);
+  console.log("Result:", sections.result);
 
-  //function testing
   const projectPath = process.cwd();
   const buildpath = path.join(projectPath, "build");
   const abi = fs

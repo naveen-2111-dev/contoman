@@ -36,7 +36,7 @@ export default async function Deploy() {
     const filedet = fs.readFileSync(configPath, "utf-8");
     const Config = JSON.parse(filedet);
 
-    const { RPC, PRIVATE_KEY, CONTRACT_FILE } = Config;
+    const { RPC, PRIVATE_KEY, CONTRACT_NAME } = Config;
 
     if (!RPC || RPC === "local") {
       console.error(chalk.red("RPC is missing in deploy.config.json!"));
@@ -60,7 +60,7 @@ export default async function Deploy() {
       }
     }
 
-    const ContractPath = path.join(buildPath, CONTRACT_FILE);
+    const ContractPath = path.join(buildPath, CONTRACT_NAME);
 
     const ABIfile = fs
       .readdirSync(ContractPath)
