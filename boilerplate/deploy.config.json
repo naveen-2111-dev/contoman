@@ -1,5 +1,5 @@
 {
     "RPC": "local",
     "PRIVATE_KEY": "privatekey",
-    "CONTRACT_NAME": "Contract"
+    "CONTRACT_NAME": "SimpleStorage"
 }
