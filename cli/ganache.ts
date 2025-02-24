@@ -1,5 +1,5 @@
 import { Command } from "commander";
-import GanacheServer from "../main/GanacheServer";
+import GanacheServer from "../src/GanacheServer";
 
 const Ganache = new Command("start-conto")
   .description("start your local blockchain instance")
