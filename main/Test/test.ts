@@ -1,6 +1,7 @@
 import chalk from "chalk";
 import * as fs from "fs-extra";
 import path from "path";
+import { TestContractCompile } from "./TestCompile";
 
 export async function Test() {
   const currentDir = process.cwd();
@@ -38,9 +39,7 @@ export async function Test() {
   console.log("Result:", sections.result);
 
   const projectPath = process.cwd();
-  const buildpath = path.join(projectPath, "build");
-  const abi = fs
-    .readdirSync(buildpath)
-    .filter((item) => item.endsWith(".json"));
-  console.log(abi);
+  const buildpath = path.join(projectPath, "test");
+  TestContractCompile();
+
 }
