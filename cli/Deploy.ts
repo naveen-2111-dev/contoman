@@ -1,5 +1,5 @@
 import { Command } from "commander";
-import Deploy from "../main/deploy";
+import Deploy from "../src/deploy";
 
 const DeployCont = new Command("deploy")
   .description("deploy the contract wih the given rpc")
