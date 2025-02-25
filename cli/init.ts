@@ -7,7 +7,7 @@ import chalk from "chalk";
 import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const boilerplatePath = path.join(__dirname, "../boilerplate");
+const boilerplatePath = path.join(__dirname, "../templates");
 
 const Init = new Command("init")
   .description("Initialize a new contract project")

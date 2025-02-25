@@ -1,9 +1,10 @@
 #function
 
-function1()
+function1(uint256, address, string)
 
 #params
 
-param1,param2,param3
+1000,0x1234567890abcdef1234567890abcdef12345678,"Hello World"
 
 #result
+

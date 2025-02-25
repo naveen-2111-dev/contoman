@@ -4,8 +4,12 @@ import path from "path";
 import { TestContractCompile } from "./TestCompile";
 
 export async function Test() {
+  // TestContractCompile(); //need to remove comment bro.................
+
   const currentDir = process.cwd();
   const TestDir = path.join(currentDir, "test");
+
+  //reading .conto file
 
   const TestFiles = fs
     .readdirSync(TestDir)
@@ -34,12 +38,31 @@ export async function Test() {
     });
   }
 
+  //Reading testconfig data
+  const testcon = path.join(TestDir, "test.config");
+  const ConfigData = fs.readFileSync(testcon, "utf-8");
+  const JsonData_Config = JSON.parse(ConfigData);
+  const ContractName = JsonData_Config.ContractName;
+
+  //getting the contract address
+  const BuildDir = path.join(currentDir, "build");
+  const ContRactBuildDir = path.join(BuildDir, ContractName);
+  const DepDir = path.join(ContRactBuildDir, "deployment"); //deployment directory
+  const ContractAddress_Json = JSON.parse(
+    fs.readFileSync(path.join(DepDir, "contract.json"), "utf-8")
+  );
+
+  //checking the contract address is correctness
+  if (
+    JsonData_Config.Contract_Address !== ContractAddress_Json.contractAddress
+  ) {
+    console.log(
+      chalk.red.bold("check the test.config file Contractaddress not matching")
+    );
+    process.exit(0);
+  }
+
   console.log("Function:", sections.function);
   console.log("Params:", sections.params);
   console.log("Result:", sections.result);
-
-  const projectPath = process.cwd();
-  const buildpath = path.join(projectPath, "test");
-  TestContractCompile();
-
 }
