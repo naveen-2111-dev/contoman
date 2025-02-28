@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: SEE LICENSE IN LICENSE
 pragma solidity ^0.8.0;
-import "./Test.sol";    
+import "./Test.sol";
 
 contract TestCaller {
     TestFunc testFunc;
 
-    constructor(address _testFuncAddress) {
+    function setTestFuncAddress(address _testFuncAddress) public {
         testFunc = TestFunc(_testFuncAddress);
     }
 
@@ -14,6 +14,7 @@ contract TestCaller {
         string memory funcName,
         bytes memory params
     ) public returns (bytes memory) {
+        require(address(testFunc) != address(0), "TestFunc address not set");
         return testFunc.GetFunction(userContract, funcName, params);
     }
 }
