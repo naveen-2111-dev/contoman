@@ -20,7 +20,7 @@ function showBanner() {
   );
 }
 
-export default async function Deploy() {
+export default async function Deploy(constructor: any[]) {
   showBanner();
 
   const projectdir = process.cwd();
@@ -89,7 +89,7 @@ export default async function Deploy() {
     );
 
     spinner.text = `Deploying contract...to ${RPC}`;
-    const contract = await contractFactory.deploy();
+    const contract = await contractFactory.deploy(...constructor);
     spinner.text = "Waiting for contract deployment confirmation...";
     await contract.waitForDeployment();
 
