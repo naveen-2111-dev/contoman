@@ -1,10 +1,10 @@
 import { Command } from "commander";
-import { Test } from "../src/Test/test";
+import { testContract } from "../src/Test";
 
-const TestConto = new Command("test")
-  .description("test your contract just by running contoman test")
+const Test = new Command("test")
+  .description("test the contract with the config and .conto file")
   .action(() => {
-    Test();
+    testContract();
   });
 
-export default TestConto;
+export default Test;
