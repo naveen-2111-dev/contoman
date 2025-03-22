@@ -20,7 +20,8 @@ export default async function contract(functionName, ...args) {
 
   try {
     console.log(`Calling function: ${functionName} with args:`, args);
-    const result = await contractInstance[functionName](...args);
+    const options = { gasLimit: 500000 };
+    const result = await contractInstance[functionName](...args, options);
 
     if (result && result.wait) {
       console.log("Transaction sent, waiting for confirmation...");
